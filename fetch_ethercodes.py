@@ -125,9 +125,16 @@ def code_key(val):
 def fetch_infile(infile):
     # check oui.csv parameter
     vout(1, 'check {ouifile}')
-    req = urllib.request.urlopen(gpar.ouifile)
-    vout(3, 'header info: {}'.format(req.info()))
-    header = req.info()
+
+    # Set a custom User-Agent header
+    headers = {
+        'User-Agent': 'fetch-ethercodes/0.5'
+    }
+    req = urllib.request.Request(gpar.ouifile, headers=headers)
+    response = urllib.request.urlopen(req)
+
+    vout(3, 'header info: {}'.format(response.info()))
+    header = response.info()
     ouisize = int(header['Content-Length'])
     vout(1, 'oui file size: {}'.format(ouisize))
     ouidate = header['Last-Modified']
@@ -159,7 +166,7 @@ def fetch_infile(infile):
     # fetch oui.csv
     if fetchoui:
         vout(1, 'fetch {ouifile}')
-        open(infile, 'wb').write(req.read())
+        open(infile, 'wb').write(response.read())
         os.utime(infile, (ouitime, ouitime))
 
     return ouidate
