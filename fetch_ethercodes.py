@@ -110,7 +110,7 @@ def cmp_ts(t1, t2):
 
 
 hex = lambda x: int(x, 16)
-hexstr = lambda h: format(h, 'x')
+hexstr = lambda h: format(h, '02x')
 
 def code_key(val):
     """ return the colon formated code key, if val is an exact 24 byte
